@@ -4,10 +4,11 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
-import { LogOut, User, Shield } from "lucide-react";
+import { LogOut, User, Shield, Mail } from "lucide-react";
 import EditProfileModal from "@/components/EditProfileModal";
 import TwoFactorModal from "@/components/TwoFactorModal";
 import ChangePasswordModal from "@/components/ChangePasswordModal";
+import EmailVerificationModal from "@/components/EmailVerificationModal";
 
 const Dashboard: React.FC = () => {
   const { user, logout } = useAuth();
@@ -15,6 +16,7 @@ const Dashboard: React.FC = () => {
   const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
   const [isTwoFactorOpen, setIsTwoFactorOpen] = useState(false);
   const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
+  const [isEmailVerificationOpen, setIsEmailVerificationOpen] = useState(false);
 
   const handleLogout = () => {
     logout();
@@ -59,13 +61,21 @@ const Dashboard: React.FC = () => {
                 </div>
               </div>
             </CardContent>
-            <CardFooter>
+            <CardFooter className="flex flex-col gap-2">
               <Button 
                 variant="outline" 
                 className="w-full"
                 onClick={() => setIsEditProfileOpen(true)}
               >
                 Edit Profile
+              </Button>
+              <Button 
+                variant="outline" 
+                className="w-full"
+                onClick={() => setIsEmailVerificationOpen(true)}
+              >
+                <Mail className="h-4 w-4 mr-2" />
+                Verify Email
               </Button>
             </CardFooter>
           </Card>
@@ -129,6 +139,12 @@ const Dashboard: React.FC = () => {
       <ChangePasswordModal 
         isOpen={isChangePasswordOpen} 
         onClose={() => setIsChangePasswordOpen(false)} 
+      />
+      
+      <EmailVerificationModal 
+        isOpen={isEmailVerificationOpen} 
+        onClose={() => setIsEmailVerificationOpen(false)} 
+        email={user?.email}
       />
     </div>
   );
