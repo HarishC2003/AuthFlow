@@ -1,14 +1,20 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
-import { LogOut, User } from "lucide-react";
+import { LogOut, User, Shield } from "lucide-react";
+import EditProfileModal from "@/components/EditProfileModal";
+import TwoFactorModal from "@/components/TwoFactorModal";
+import ChangePasswordModal from "@/components/ChangePasswordModal";
 
 const Dashboard: React.FC = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
+  const [isTwoFactorOpen, setIsTwoFactorOpen] = useState(false);
+  const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
 
   const handleLogout = () => {
     logout();
@@ -54,7 +60,11 @@ const Dashboard: React.FC = () => {
               </div>
             </CardContent>
             <CardFooter>
-              <Button variant="outline" className="w-full">
+              <Button 
+                variant="outline" 
+                className="w-full"
+                onClick={() => setIsEditProfileOpen(true)}
+              >
                 Edit Profile
               </Button>
             </CardFooter>
@@ -77,13 +87,25 @@ const Dashboard: React.FC = () => {
                 </div>
               </div>
             </CardContent>
-            <CardFooter className="flex justify-between">
-              <Button variant="outline" className="w-1/2">
+            <CardFooter className="flex flex-col gap-2">
+              <Button 
+                variant="outline" 
+                className="w-full"
+                onClick={() => setIsTwoFactorOpen(true)}
+              >
+                <Shield className="h-4 w-4 mr-2" />
+                Two-Factor Authentication
+              </Button>
+              <Button 
+                variant="outline" 
+                className="w-full"
+                onClick={() => setIsChangePasswordOpen(true)}
+              >
                 Change Password
               </Button>
               <Button 
                 variant="destructive" 
-                className="w-1/2 ml-2"
+                className="w-full"
                 onClick={handleLogout}
               >
                 <LogOut className="h-4 w-4 mr-2" />
@@ -93,6 +115,21 @@ const Dashboard: React.FC = () => {
           </Card>
         </div>
       </div>
+
+      <EditProfileModal 
+        isOpen={isEditProfileOpen} 
+        onClose={() => setIsEditProfileOpen(false)} 
+      />
+      
+      <TwoFactorModal 
+        isOpen={isTwoFactorOpen} 
+        onClose={() => setIsTwoFactorOpen(false)} 
+      />
+      
+      <ChangePasswordModal 
+        isOpen={isChangePasswordOpen} 
+        onClose={() => setIsChangePasswordOpen(false)} 
+      />
     </div>
   );
 };
